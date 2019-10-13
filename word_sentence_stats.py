@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 
@@ -7,17 +6,14 @@ import string
 from itertools import chain
 from functools import reduce
 from random import choice
+from collections import Counter
 import re
 import sys
 
 
 def read_articles(p):
     for p in path.iterdir():
-        if p.is_file() or p.name.startswith('.'):
-            continue
-        for f in p.iterdir():
-            yield f.read_text()
-
+        yield p.read_text()
 
 def is_bangla(ch):
     return ch == '।' or ch >= "\u0980" and ch <= "\u09ff" and ch != "\u09e4"
@@ -90,17 +86,14 @@ all_chars = ''.join(unique_chars)
 print(filter_except_bangla_and_punctuation_and_whitespace(all_chars))
 
 
-unique_words = set(
+unique_words = Counter(
     word for article in articles for word in words_in_article(article))
 
 
 print('Unique words: {}'.format(len(unique_words)))
 
-
-unique_words = list(unique_words)
-
-for i in range(100):
-    print(choice(unique_words))
+for w in unique_words.most_common(100):
+    print(w)
 
 print('Average word length: {}'.format(mean(list(map(len, unique_words)))))
 
