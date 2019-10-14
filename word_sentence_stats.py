@@ -73,6 +73,8 @@ def words_in_article(article):
 
 path = Path(sys.argv[1])
 
+output_vocab = len(sys.argv) > 2
+
 
 articles = list(read_articles(path))
 
@@ -95,7 +97,15 @@ print('Unique words: {}'.format(len(unique_words)))
 for w in unique_words.most_common(100):
     print(w)
 
-print('Average word length: {}'.format(mean(list(map(len, unique_words)))))
+unique_words = sorted([(c, w) for (w,c) in unique_words.items()], reverse=True) 
+
+if output_vocab:
+    with open(sys.argv[2], 'w') as f:
+        for c, w  in unique_words:
+            f.write('{}, {}\n'.format(w, c))
+
+
+print('Average word length: {}'.format(mean(list(map(len, [w for (c, w) in unique_words])))))
 
 
 sentences = unique_sentences_in_articles(articles)
