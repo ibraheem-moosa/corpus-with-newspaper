@@ -1,13 +1,14 @@
 import sys
 from collections import Counter
 from pathlib import Path
+import pandas as pd
+from urllib.parse import urlparse
 
 
-path = Path(sys.argv[1])
-website_article_count = Counter()
-
-for w in path.iterdir():
-    website_article_count[w.name] = len(list(w.iterdir()))
+metadata = pd.read_csv(Path(sys.argv[1]))
+metadata = metadata[pd.notna(metadata['url'])]
+metadata['domain'] = metadata.apply(lambda row: urlparse(row['url']).hostname, axis=1)
+website_article_count = Counter(metadata.domain)
 
 for w, c in website_article_count.most_common():
     print(w, c - 1)
