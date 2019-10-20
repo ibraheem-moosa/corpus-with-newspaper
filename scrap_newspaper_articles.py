@@ -26,7 +26,7 @@ metadata_columns = ['filename', 'author', 'title', 'url', 'publish_date']
 
 article_urls = set()
 if Path(metadata_file).exists():
-    df = pd.read_csv(metadata_file)
+    df = pd.read_csv(metadata_file, lineterminator='\n')
     article_urls = set(df['url'])
 
 for url in urls:

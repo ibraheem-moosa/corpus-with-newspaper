@@ -5,7 +5,7 @@ import pandas as pd
 from urllib.parse import urlparse
 
 
-metadata = pd.read_csv(Path(sys.argv[1]))
+metadata = pd.read_csv(Path(sys.argv[1]), lineterminator='\n')
 metadata = metadata[pd.notna(metadata['url'])]
 metadata['domain'] = metadata.apply(lambda row: urlparse(row['url']).hostname, axis=1)
 website_article_count = Counter(metadata.domain)
